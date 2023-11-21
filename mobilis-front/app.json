@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "mobilis-front",
+    "slug": "mobilis-front",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
