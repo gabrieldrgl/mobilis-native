@@ -6,17 +6,6 @@ export const Background = styled.View`
   width: 100%;
 `;
 
-export const Footer = styled.View`
-  background-color: #F3F3F3;
-  border-radius: 20px 20px 0 0;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  padding: 30px;
-  display: flex;
-  align-items: center;
-`;
-
 export const FooterText = styled.Text`
   font-size: 20px;
   color: #000000;

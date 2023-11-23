@@ -1,5 +1,8 @@
 import React from 'react';
 import { Background, Button, ButtonText, Footer, FooterText } from './styles';
+import MapView from 'react-native-maps';
+import { RoundedFooter } from '../../components/roundedFooter/styles';
+
 export default function Map() {
   return (
     <>
@@ -13,10 +16,10 @@ export default function Map() {
         }}
       />
 
-      <Footer>
+      <RoundedFooter>
         <FooterText>Horário máximo para check-in - 17:30</FooterText>
         <Button><ButtonText>Realizar check-in</ButtonText></Button>
-      </Footer>
+      </RoundedFooter>
     </>
   );
 }
