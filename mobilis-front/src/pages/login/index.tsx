@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, ImageContainer, LoginForm, Label } from "./styles";
-import { View } from "react-native";
+import { View, KeyboardAvoidingView } from "react-native";
 
 import { Input } from "../../components/Input"
 
-const image = "../../assets/van.svg";
+const image = "../../assets/van.png";
 
 interface user {
   login: string;
@@ -18,20 +18,24 @@ export default function Login() {
   const [password, setPassword] = useState("")
 
   function validateUser() {
-    if(login == users[0].login && password == users[0].password) {
+    if (login == users[0].login && password == users[0].password) {
       alert("Entrou no sistema!")
     }
   }
 
   return (
     <View>
-      <Container>{/* Aqui vai o Icone da van */}</Container>
+      <Container>
+      <ImageContainer source={require(image)}/>
+      </Container>
+      {/* Ao acessar input para digitar tá subindo o body do form */}
       <LoginForm>
-        <Label>Usuario / E-mail</Label>
-        <Input placeholder="Usuario" />
-        <Label></Label>
-        <Input placeholder="Senha" secureTextEntry={true} />
-        
+        <KeyboardAvoidingView>
+          <Label>Usuario / E-mail</Label>
+          <Input name={'mail'} size={24} color={'#277DFE'} placeholder="Digite seu e-mail" />
+          <Label>Senha</Label>
+          <Input name={'lock'} size={24} color={'#277DFE'} placeholder="Digite sua senha" secureTextEntry={true} />
+        </KeyboardAvoidingView>
       </LoginForm>
     </View>
   );
