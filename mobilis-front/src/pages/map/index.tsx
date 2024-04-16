@@ -1,5 +1,5 @@
 import React from 'react';
-import { Background, Button, ButtonText, Footer, FooterText } from './styles';
+import { Background, Button, ButtonText, FooterText } from './styles';
 import MapView from 'react-native-maps';
 import { RoundedFooter } from '../../components/roundedFooter/styles';
 

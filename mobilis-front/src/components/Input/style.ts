@@ -9,13 +9,15 @@ export const Container = styled.View`
     background-color: #878787;
     padding: 5px;
     align-items: center;
-    justify-content: space-between;
+    border-width: 1px;
+    border-color: #878787;
 `;
 
 export const Icon = styled(Icons)`
-
+   
 `;
 
 export const InputText = styled.TextInput`
-    border-width: 1px;
+    padding: 3px;
+    width: auto;
 `;

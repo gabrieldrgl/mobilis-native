@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer"
-import Map from "../pages/map"
+import Map from "../pages/Map"
 import Profile from "../pages/profile"
-import Login from "../pages/login";
+import Login from "../pages/Login";
 
 const Drawer = createDrawerNavigator();
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, ImageContainer, LoginForm, Label } from "./styles";
+import { Container, ImageContainer, LoginForm, Label } from './styles';
 import { View, KeyboardAvoidingView } from "react-native";
 
 import { Input } from "../../components/Input"
