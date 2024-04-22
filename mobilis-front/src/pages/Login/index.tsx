@@ -40,13 +40,20 @@ export default function Login() {
       <Container>
         <ImageContainer source={require(image)} />
       </Container>
-      {/* Ao acessar input para digitar tá subindo o body do form */}
       <KeyboardAvoidingView>
         <LoginForm>
           <Label>Usuario / E-mail</Label>
           <Input name={'mail'} size={24} color={'#277DFE'} placeholder="Digite seu e-mail" value={login} onChangeText={setLogin} />
           <Label>Senha</Label>
-          <Input name={'lock'} size={24} color={'#277DFE'} placeholder="Digite sua senha" secureTextEntry={true} value={password} onChangeText={setPassword} />
+          <Input name={'lock'} 
+                 size={24} 
+                 color={'#277DFE'} 
+                 placeholder="Digite sua senha" 
+                 secureTextEntry={true} 
+                 value={password} 
+                 onChangeText={setPassword} 
+                 iconLeft={'eye'}
+                 onPress={() => {}}/>
           <Button onPress={validateUser} title={"Entrar"}></Button>
         </LoginForm>
       </KeyboardAvoidingView>
