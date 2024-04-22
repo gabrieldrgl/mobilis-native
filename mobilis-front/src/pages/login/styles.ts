@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -7,7 +8,7 @@ export const Container = styled.View`
 `;
 
 export const ImageContainer = styled.Image`
-  margin-top: 12px;
+  margin-top:  ${Platform.OS == "ios" ? "20px" : "12px"};
   margin-left: 115px;
 `;
 

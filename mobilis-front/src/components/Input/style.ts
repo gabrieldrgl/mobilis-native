@@ -19,5 +19,5 @@ export const Icon = styled(Icons)`
 
 export const InputText = styled.TextInput`
     padding: 3px;
-    width: auto;
+    margin-left: 12px;
 `;

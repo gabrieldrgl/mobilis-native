@@ -3,6 +3,7 @@ import { Container, ImageContainer, LoginForm, Label } from './styles';
 import { View, KeyboardAvoidingView, Alert } from "react-native";
 
 import { Input } from "../../components/Input"
+import Button from "../../components/Button";
 
 const image = "../../assets/van.png";
 
@@ -28,6 +29,10 @@ export default function Login() {
         }
       }
     }
+
+    if (!login && !password) {
+      alert("Preencha o campo de Email e a Senha!")
+    }
   }
 
   return (
@@ -36,12 +41,15 @@ export default function Login() {
         <ImageContainer source={require(image)} />
       </Container>
       {/* Ao acessar input para digitar tá subindo o body do form */}
-      <LoginForm>
+      <KeyboardAvoidingView>
+        <LoginForm>
           <Label>Usuario / E-mail</Label>
           <Input name={'mail'} size={24} color={'#277DFE'} placeholder="Digite seu e-mail" value={login} onChangeText={setLogin} />
           <Label>Senha</Label>
           <Input name={'lock'} size={24} color={'#277DFE'} placeholder="Digite sua senha" secureTextEntry={true} value={password} onChangeText={setPassword} />
-      </LoginForm>
+          <Button onPress={validateUser} title={"Entrar"}></Button>
+        </LoginForm>
+      </KeyboardAvoidingView>
     </View>
   );
 }
