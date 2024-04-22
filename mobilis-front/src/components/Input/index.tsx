@@ -10,7 +10,7 @@ export function Input(props) {
     return (
         <Container>
             <Icon name={props.name} size={props.size} color={props.color} />
-            <InputText placeholder={props.placeholder} secureTextEntry={props.secureTextEntry} />
+            <InputText placeholder={props.placeholder} secureTextEntry={props.secureTextEntry} value={props.value} onChangeText={props.onChangeText} />
         </Container>
     )
 }

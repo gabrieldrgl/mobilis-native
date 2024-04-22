@@ -29,7 +29,3 @@ export const Label = styled.Text`
   margin-top: 6px;
   margin-bottom: 3px;
 `;
-
-export const Button = styled.Button`
-  
-`;
