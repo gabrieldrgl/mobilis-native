@@ -3,6 +3,8 @@ import { Background, Button, ButtonText, FooterText } from './styles';
 import MapView from 'react-native-maps';
 import { RoundedFooter } from '../../components/roundedFooter/styles';
 
+
+
 export default function Map() {
   return (
     <>

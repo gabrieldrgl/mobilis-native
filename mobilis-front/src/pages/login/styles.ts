@@ -30,3 +30,11 @@ export const Label = styled.Text`
   margin-top: 6px;
   margin-bottom: 3px;
 `;
+
+export const Line = styled.View`
+  background-color: #277DFE;
+  width: 270px;
+  height: 2px;
+  margin-top: 16px;
+  align-self: center;
+`;
