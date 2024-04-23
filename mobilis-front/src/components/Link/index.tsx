@@ -1,10 +1,9 @@
-import { View } from "react-native"
-import { Container, Title } from "./styles"
+import { Container, Title } from './styles'
 
-export default function Link(props: { onPress: () => void, title: string }) {
-  return (
+export default function Link(props) {
+  return(
     <Container onPress={props.onPress}>
-      <Title>{props.title}</Title>
+			<Title>{props.title}</Title>
     </Container>
   )
 }

@@ -12,3 +12,4 @@ export const Title = styled.Text`
   color: ${colors.primary};
   font-size: 16px;
 `;
+

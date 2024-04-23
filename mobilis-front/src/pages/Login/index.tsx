@@ -78,6 +78,16 @@ export default function Login({ route, navigation }: Props) {
           <Line />
           <Button title="Entrar com o Google" onPress={() => { }} />
 
+          <Input name={'lock'} 
+                 size={24} 
+                 color={'#277DFE'} 
+                 placeholder="Digite sua senha" 
+                 secureTextEntry={true} 
+                 value={password} 
+                 onChangeText={setPassword} 
+                 iconLeft={'eye'}
+                 onPress={() => {}}/>
+          <Button onPress={handleLogin} title={"Entrar"}></Button>
         </LoginForm>
       </KeyboardAvoidingView>
     </View>
