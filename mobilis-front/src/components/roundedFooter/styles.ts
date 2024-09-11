@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const RoundedFooter = styled.View`
   background-color: #F3F3F3;

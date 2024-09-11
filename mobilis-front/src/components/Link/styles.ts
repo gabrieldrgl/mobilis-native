@@ -8,7 +8,6 @@ export const Container = styled.TouchableOpacity`
 `;
 
 export const Title = styled.Text`
-  background-color: red;
   color: ${colors.primary};
   font-size: 16px;
 `;

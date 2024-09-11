@@ -5,58 +5,48 @@ import { Input } from "../../components/Input"
 import Button from "../../components/Button";
 import { colors } from "../../global/theme";
 import Link from "../../components/Link";
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import User from "../../models/user";
+import { useAuth } from "../../contexts/AuthContext";
 
 type RootStackParamList = {
-  Login: { onLogin: () => void };
+  Map: undefined;
 };
 
-type LoginScreenRouteProp = RouteProp<RootStackParamList, 'Login'>;
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
-
-type RootDrawerParamList = {
-  Map: undefined
-};
-
-
-type MapScreenNavigationProp = DrawerNavigationProp<RootDrawerParamList, 'Map'>;
-type Props = {
-  route: LoginScreenRouteProp;
-  navigation: LoginScreenNavigationProp & MapScreenNavigationProp;
-};
-
-
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const image = "../../assets/van.png";
 
-interface user {
-  login: string;
-  password: string;
-}
-
-//TODO - Trocar para a requisição do endpoint de user da api!! 
-const users: user[] = [
-  { login: "caio", password: "1234" },
-  { login: "João", password: "123" }
+// TODO - Trocar para a requisição do endpoint de user da api!!
+const users: User[] = [
+  { id: "1", name: "caio", password: "1234", role: "driver", email: "caio@gmail.com", location: { latitude: 0, longitude: 0 } },
+  { id: "2", name: "joao", password: "123", role: "student", email: "joao@gmail.com", location: { latitude: 0, longitude: 0 } }
 ]
 
-export default function Login({ route, navigation }: Props) {
-  const [login, setLogin] = useState("")
-  const [password, setPassword] = useState("")
+export default function Login() {
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const navigation = useNavigation<NavigationProp>();
+  const { signIn } = useAuth();
 
-  function handleLogin() {
-    for (const user of users) {
-      if(!login && !password) {
-        Alert.alert("Nenhum usuário encontrado")
-        return
+  const handleLogin = async () => {
+    if (!login || !password) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    const user = users.find(u => u.name === login && u.password === password);
+
+    if (user) {
+      try {
+        await signIn(user);
+        navigation.navigate('Map');
+      } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        Alert.alert("Erro", "Ocorreu um erro ao fazer login");
       }
-      
-      if (login && password) {
-        route.params?.onLogin()
-        navigation.navigate('Map')
-        break
-      }
+    } else {
+      Alert.alert("Erro", "E-mail ou senha incorretos");
     }
   };
 
@@ -65,29 +55,40 @@ export default function Login({ route, navigation }: Props) {
       <Container>
         <ImageContainer source={require(image)} />
       </Container>
-      {/* Ao acessar input para digitar tá subindo o body do form apenas no ANDROID*/}
       <KeyboardAvoidingView>
         <LoginForm>
-          <Label>Usuario / E-mail</Label>
-          <Input name={'mail'} color={colors.primary} placeholder="Digite seu e-mail" value={login} onChangeText={setLogin} />
+          <Label>Usuário / E-mail</Label>
+          <Input
+            name={'mail'}
+            color={colors.primary}
+            placeholder="Digite seu e-mail"
+            value={login}
+            onChangeText={setLogin} />
           <Label>Senha</Label>
-          <Input name={'lock'} placeholder="Digite sua senha" secureTextEntry={true} value={password} onChangeText={setPassword} />
-          <Link onPress={() => { }} title="Esqueceu sua senha?" />
-          <Link onPress={() => { }} title="Sou uma empresa!" />
-          <Button onPress={handleLogin} title={"Entrar"}></Button>
+          <Input name={'lock'}
+            size={24}
+            color={'#277DFE'}
+            placeholder="Digite sua senha"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+            iconLeft={'eye'}
+            onPress={() => { }} />
+          <View>
+            <Link
+              onPress={() => { }}
+              title="Esqueceu sua senha?" />
+            <Link
+              onPress={() => { }}
+              title="Sou uma empresa!" />
+          </View>
           <Line />
-          <Button title="Entrar com o Google" onPress={() => { }} />
-
-          <Input name={'lock'} 
-                 size={24} 
-                 color={'#277DFE'} 
-                 placeholder="Digite sua senha" 
-                 secureTextEntry={true} 
-                 value={password} 
-                 onChangeText={setPassword} 
-                 iconLeft={'eye'}
-                 onPress={() => {}}/>
-          <Button onPress={handleLogin} title={"Entrar"}></Button>
+          <Button
+            title="Entrar com o Google"
+            onPress={() => { }} />
+          <Button
+            onPress={handleLogin}
+            title={"Entrar"} />
         </LoginForm>
       </KeyboardAvoidingView>
     </View>

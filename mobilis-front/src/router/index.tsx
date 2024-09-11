@@ -1,9 +1,8 @@
 import { createDrawerNavigator } from "@react-navigation/drawer"
 import { createStackNavigator } from "@react-navigation/stack";
-import Map from "../pages/Map"
+import { Map }  from "../pages/map/index"
 import Login from "../pages/Login";
 import { Register } from "../pages/Register";
-import Button from "../components/Button";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
