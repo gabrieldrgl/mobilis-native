@@ -27,8 +27,6 @@ const ALUNOS_MOCK: Posicao[] = [
   { latitude: -24.948000, longitude: -53.505000, descricao: 'Aluno 2' },
 ];
 
-const API_KEY = "AIzaSyBuVDyuAvCFMP1lvy7mK18YK1NHlOTEX4c";
-
 export function Map() {
   const [localizacaoAtual, setLocalizacaoAtual] = useState<Posicao | null>(null);
   const [alunosParaPegar, setAlunosParaPegar] = useState<Posicao[]>([]);
