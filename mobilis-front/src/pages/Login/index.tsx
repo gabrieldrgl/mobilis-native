@@ -10,6 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import User from "../../models/user";
 import { useAuth } from "../../contexts/AuthContext";
 
+
 type RootStackParamList = {
   Map: undefined;
 };
@@ -17,7 +18,7 @@ type RootStackParamList = {
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const image = "../../assets/van.png";
 
-// TODO - Trocar para a requisição do endpoint de user da api!!
+//TODO - Trocar para a requisição do endpoint de user da api!!
 const users: User[] = [
   { id: "1", name: "caio", password: "1234", role: "driver", email: "caio@gmail.com", location: { latitude: 0, longitude: 0 } },
   { id: "2", name: "joao", password: "123", role: "student", email: "joao@gmail.com", location: { latitude: 0, longitude: 0 } }
@@ -28,7 +29,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigation = useNavigation<NavigationProp>();
   const { signIn } = useAuth();
-
+  
   const handleLogin = async () => {
     if (!login || !password) {
       Alert.alert("Erro", "Por favor, preencha todos os campos");
