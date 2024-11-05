@@ -1,6 +1,7 @@
 import MapView from 'react-native-maps';
 import RoundedContainer from '../../components/roundedContainer';
 import { Button, ButtonText, CheckinText } from './styles';
+import DrawerButton from '../../components/DrawerButton';
 
 export default function Map() {
   return (
@@ -21,6 +22,8 @@ export default function Map() {
           <ButtonText>Realizar check-in</ButtonText>
         </Button>
       </RoundedContainer>
+
+      <DrawerButton />
     </>
   );
 }
