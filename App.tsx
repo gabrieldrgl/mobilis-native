@@ -1,20 +1,11 @@
 import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-
-import Map from './src/pages/map';
-import CustomDrawer from './src/components/CustomDrawer';
-import Login from './src/pages/Login';
-
-const Drawer = createDrawerNavigator();
+import { AuthProvider } from './src/context/AuthContext';
+import AppNav from './src/navigation/AppNav';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} screenOptions={{headerShown: false}}>
-        <Drawer.Screen name="Mapa" component={Map} />
-        <Drawer.Screen name="Login" component={Login} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <AppNav />
+    </AuthProvider>
   );
 }

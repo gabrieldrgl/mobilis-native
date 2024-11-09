@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import RoundedContainer from "../../components/roundedContainer";
 import { Background, Button, ButtonText, FormContainer, Hr, IconContainer, RegisterLink, RegisterText, RoundedFooter, VanIcon } from "./styles";
 import FormInput from "../../components/FormInput";
 import DropShadow from "react-native-drop-shadow";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Login() {
+  const {login} = useContext(AuthContext);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -36,7 +38,7 @@ export default function Login() {
                 <FormInput label="E-mail" placeholder="Digite seu e-mail" />
                 <FormInput label="Senha" placeholder="Digite sua senha" />
 
-                <Button>
+                <Button onPress={() => {login()}}>
                   <ButtonText>
                     Entrar
                   </ButtonText>
