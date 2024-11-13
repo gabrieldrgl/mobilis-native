@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   width: 100%;
@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const Label = styled.Text`
   color: #000000;
-  font-size: 18;
+  font-size: 18px;
 `;
 
 export const InputContainer = styled.TextInput`
@@ -18,4 +18,16 @@ export const InputContainer = styled.TextInput`
   border-radius: 4px;
   padding: 10px;
   font-size: 18px;
+`;
+
+export const StyledTouchableOpacity = styled.TouchableOpacity`
+  width: 100%;
+  background-color: #E1E1E1;
+  border: #878787 1px;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 18px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
