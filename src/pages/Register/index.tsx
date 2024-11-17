@@ -21,30 +21,18 @@ export default function Register() {
           </IconContainer>
 
           <FormContainer>
-            <DropShadow
-              style={{
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 0,
-                },
-                shadowOpacity: 1,
-                shadowRadius: 5,
-              }}
-            >
-              <RoundedFooter>
-                <FormInput label="Nome" placeholder="Digite seu nome" />
-                <FormInput label="E-mail" placeholder="Digite seu e-mail" />
-                <FormInput label="Senha" placeholder="Digite sua senha" />
-                <FormInput label="Confirmar senha" placeholder="Digite sua senha" />
+            <RoundedFooter>
+              <FormInput label="Nome" placeholder="Digite seu nome" />
+              <FormInput label="E-mail" placeholder="Digite seu e-mail" />
+              <FormInput label="Senha" placeholder="Digite sua senha" />
+              <FormInput label="Confirmar senha" placeholder="Digite sua senha" />
 
-                <Button>
-                  <ButtonText>
-                    Cadastrar
-                  </ButtonText>
-                </Button>
-              </RoundedFooter>
-            </DropShadow>
+              <Button>
+                <ButtonText>
+                  Cadastrar
+                </ButtonText>
+              </Button>
+            </RoundedFooter>
           </FormContainer>
         </Background>
       </ScrollView>

@@ -26,34 +26,22 @@ export default function Login() {
           </IconContainer>
 
           <FormContainer>
-            <DropShadow
-              style={{
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 0,
-                },
-                shadowOpacity: 1,
-                shadowRadius: 5,
-              }}
-            >
-              <RoundedFooter>
-                <FormInput label="E-mail" placeholder="Digite seu e-mail" value={email} onChangeText={text => setEmail(text)} />
-                <FormInput label="Senha" placeholder="Digite sua senha" value={password} onChangeText={text => setPassword(text)} />
+            <RoundedFooter>
+              <FormInput label="E-mail" placeholder="Digite seu e-mail" value={email} onChangeText={text => setEmail(text)} />
+              <FormInput label="Senha" placeholder="Digite sua senha" value={password} onChangeText={text => setPassword(text)} />
 
-                <Button onPress={() => {login(email, password)}}>
-                  <ButtonText>
-                    Entrar
-                  </ButtonText>
-                </Button>
+              <Button onPress={() => {login(email, password)}}>
+                <ButtonText>
+                  Entrar
+                </ButtonText>
+              </Button>
 
-                <Hr />
+              <Hr />
 
-                <RegisterText>
-                  Não possui uma conta? <RegisterLink>Cadastre-se</RegisterLink>
-                </RegisterText>
-              </RoundedFooter>
-            </DropShadow>
+              <RegisterText>
+                Não possui uma conta? <RegisterLink>Cadastre-se</RegisterLink>
+              </RegisterText>
+            </RoundedFooter>
           </FormContainer>
         </Background>
       </ScrollView>
