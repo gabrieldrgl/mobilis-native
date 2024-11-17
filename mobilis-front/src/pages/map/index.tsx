@@ -13,19 +13,30 @@ type Posicao = {
   descricao: string;
 };
 
+const API_KEY = 'AIzaSyBuVDyuAvCFMP1lvy7mK18YK1NHlOTEX4c';
+
 const USUARIOS_MOCK: User[] = [{
-  id: '1',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  password: '123456',
-  role: 'driver',
-  location: { latitude: 0, longitude: 0 }
-}];
+    id: '1',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    password: '123456',
+    role: 'student',
+    location: { latitude: 0, longitude: 0 } 
+  },
+  {
+    id: '2',
+    name: 'John Doe 2',
+    email: 'john.doe2@example.com',
+    password: '1234567',
+    role: 'student',
+    location: { latitude: 0, longitude: 0 } 
+  }
+]
 
 const ALUNOS_MOCK: Posicao[] = [
-  { latitude: -24.946950977119094, longitude: -53.50766888929068, descricao: 'Aluno 1' },
-  { latitude: -24.948000, longitude: -53.505000, descricao: 'Aluno 2' },
-];
+  { latitude: -24.945194990880772, longitude: -53.444138076684624, descricao: 'Aluno 1' },
+  { latitude: -24.93613800450973, longitude: -53.45217705537791, descricao: 'Aluno 2' }
+]
 
 export function Map() {
   const [localizacaoAtual, setLocalizacaoAtual] = useState<Posicao | null>(null);
@@ -74,7 +85,7 @@ export function Map() {
   if (!localizacaoAtual || !destinoAtual) {
     return <Text>Carregando...</Text>;
   }
- 
+  
   return (
     <View style={{ flex: 1 }}>
       <MapView

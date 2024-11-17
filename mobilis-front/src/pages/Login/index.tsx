@@ -19,9 +19,8 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const image = "../../assets/van.png";
 
 //TODO - Trocar para a requisição do endpoint de user da api!!
-const users: User[] = [
+const users = [
   { id: "1", name: "caio", password: "1234", role: "driver", email: "caio@gmail.com", location: { latitude: 0, longitude: 0 } },
-  { id: "2", name: "joao", password: "123", role: "student", email: "joao@gmail.com", location: { latitude: 0, longitude: 0 } }
 ]
 
 export default function Login() {
@@ -40,7 +39,7 @@ export default function Login() {
 
     if (user) {
       try {
-        await signIn(user);
+        signIn(user);
         navigation.navigate('Map');
       } catch (error) {
         console.error('Erro ao fazer login:', error);
@@ -61,6 +60,7 @@ export default function Login() {
           <Label>Usuário / E-mail</Label>
           <Input
             name={'mail'}
+            size={24}
             color={colors.primary}
             placeholder="Digite seu e-mail"
             value={login}
@@ -74,7 +74,7 @@ export default function Login() {
             value={password}
             onChangeText={setPassword}
             iconLeft={'eye'}
-            onPress={() => { }} />
+            onPress={() => {  }} />
           <View>
             <Link
               onPress={() => { }}
@@ -83,13 +83,14 @@ export default function Login() {
               onPress={() => { }}
               title="Sou uma empresa!" />
           </View>
+          
+          <Button
+            onPress={handleLogin}
+            title={"Entrar"} />
           <Line />
           <Button
             title="Entrar com o Google"
             onPress={() => { }} />
-          <Button
-            onPress={handleLogin}
-            title={"Entrar"} />
         </LoginForm>
       </KeyboardAvoidingView>
     </View>

@@ -3,6 +3,7 @@ import Icons from '@expo/vector-icons/Feather';
 
 export const Container = styled.View`
     flex-direction: row;
+    justify-content: space-between;
     width: 350px;
     height: 61px;
     border-radius: 4px;
@@ -13,11 +14,16 @@ export const Container = styled.View`
     border-color: #878787;
 `;
 
+export const Box = styled.View`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
 export const Icon = styled(Icons)`
-   
+    margin-right: 5px;
 `;
 
 export const InputText = styled.TextInput`
     padding: 3px;
-    margin-left: 12px;
 `;
