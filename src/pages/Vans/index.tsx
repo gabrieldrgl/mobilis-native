@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, View, TouchableOpacity } from "react-native";
+import React, { useCallback, useContext, useState } from "react";
+import { ActivityIndicator, Alert, TouchableOpacity } from "react-native";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../config";
 import { Body, DeleteButton, Header, HeaderBody, HeaderContent, HeaderText, Van, VanContainer, VanText } from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import BackButton from "../../components/BackButton";
 
@@ -12,10 +12,6 @@ export default function Vans({ navigation }) {
   const { userInfo, userToken } = useContext(AuthContext);
   const [vans, setVans] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchVans();
-  }, [userInfo]);
 
   const fetchVans = async () => {
     try {
@@ -64,6 +60,12 @@ export default function Vans({ navigation }) {
       Alert.alert("Erro", "Ocorreu um erro ao tentar excluir a van.");
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchVans();
+    }, [userInfo])
+  );
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
