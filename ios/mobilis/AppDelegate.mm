@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
-
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+#import <GoogleMaps/GoogleMaps.h> // Import necessário para Google Maps
 
 @implementation AppDelegate
 
@@ -9,8 +9,8 @@
 {
   self.moduleName = @"main";
 
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
+  [GMSServices provideAPIKey:@"AIzaSyBuVDyuAvCFMP1lvy7mK18YK1NHlOTEX4c"];
+
   self.initialProps = @{};
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
@@ -41,19 +41,17 @@
   return [super application:application continueUserActivity:userActivity restorationHandler:restorationHandler] || result;
 }
 
-// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
+// Explicitamente define os delegates de notificações remotas para garantir compatibilidade com algumas bibliotecas de terceiros
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
   return [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
-// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
   return [super application:application didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
-// Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];

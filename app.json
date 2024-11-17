@@ -13,7 +13,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mobilis"
+      "bundleIdentifier": "com.anonymous.mobilis",
+      "ios.config.googleMapsApiKey": "AIzaSyBuVDyuAvCFMP1lvy7mK18YK1NHlOTEX4c"
     },
     "android": {
       "adaptiveIcon": {
