@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import MapView from 'react-native-maps';
+import React, { useContext, useEffect, useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
 import { View, Modal, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import RoundedContainer from '../../components/roundedContainer';
 import { Button, ButtonText, CheckinText } from './styles';
@@ -7,6 +7,24 @@ import DrawerButton from '../../components/DrawerButton';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../config';
+import MapViewDirections from 'react-native-maps-directions';
+import * as Location from 'expo-location';
+import styled from 'styled-components/native';
+
+type Posicao = {
+  latitude: number;
+  longitude: number;
+  descricao: string;
+};
+
+const API_KEY = 'AIzaSyBuVDyuAvCFMP1lvy7mK18YK1NHlOTEX4c';
+
+const ALUNOS_MOCK: Posicao[] = [
+  { latitude: -24.94895372660779, longitude: -53.4530257330817, descricao: 'Aluno 1' },
+  { latitude: -24.93613800450973, longitude: -53.45217705537791, descricao: 'Aluno 2' },
+  { latitude: -24.948132569970355, longitude: -53.456626183001525, descricao: 'Aluno 3'}
+];
+
 
 export default function Map() {
   const { userInfo, userToken, vanInfo } = useContext(AuthContext);
@@ -25,6 +43,51 @@ export default function Map() {
     latitude: null,
     longitude: null,
   });
+  const [localizacaoAtual, setLocalizacaoAtual] = useState<Posicao | null>(null);
+  const [alunosParaPegar, setAlunosParaPegar] = useState<Posicao[]>(ALUNOS_MOCK);
+
+  useEffect(() => {
+    obterLocalizacaoAtual();
+
+    const intervalo = setInterval(() => {
+      obterLocalizacaoAtual();
+    }, 10000);
+
+    return () => clearInterval(intervalo);
+  }, []);
+
+  const obterLocalizacaoAtual = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permissão de localização negada', 'Por favor, habilite a permissão de localização.');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setLocalizacaoAtual({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        descricao: 'Localização atual'
+      });
+    } catch (erro) {
+      console.error('Erro ao obter localização:', erro);
+      Alert.alert('Erro ao obter localização', 'Não foi possível obter sua localização.');
+    }
+  };
+
+  const atualizarProximoDestino = () => {
+    if (alunosParaPegar.length > 1) {
+      setAlunosParaPegar(alunosParaPegar.slice(1));
+    } else if (alunosParaPegar.length === 1) {
+      setAlunosParaPegar([]);
+      Alert.alert('Concluído', 'Todos os alunos foram pegos!');
+    }
+  };
+
+  if (!localizacaoAtual) {
+    return <Text>Carregando localização...</Text>;
+  }
 
   console.log(vanInfo)
 
@@ -141,20 +204,95 @@ export default function Map() {
   return (
     <>
       <MapView
-        style={{ width: '100%', height: '100%' }}
+        style={{ flex: 1 }}
         initialRegion={{
-          latitude: 37.788225,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: localizacaoAtual.latitude,
+          longitude: localizacaoAtual.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         }}
-        region={{
-          latitude: formData.latitude || 37.788225,
-          longitude: formData.longitude || -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
+      >
+        {/* Marcador da localização atual */}
+        <Marker
+          coordinate={localizacaoAtual}
+          title="Sua localização"
+          description="Você está aqui"
+        />
+
+        {/* Marcadores para cada aluno */}
+        {alunosParaPegar.map((aluno) => (
+          <>
+          {console.log(aluno)}
+          <Marker
+            key={aluno.descricao}
+            coordinate={aluno}
+            title={aluno.descricao}
+            description={`Ponto de coleta`}
+          />
+          </>
+        ))}
+
+        {/* Verifique se há pelo menos um aluno para pegar e localizacaoAtual está definida */}
+        {localizacaoAtual && alunosParaPegar.length > 0 && (
+          <>
+            {/* Rota para o próximo aluno (em vermelho) */}
+            <MapViewDirections
+              origin={{
+                latitude: localizacaoAtual.latitude,
+                longitude: localizacaoAtual.longitude
+              }}
+              destination={{
+                latitude: alunosParaPegar[0].latitude,
+                longitude: alunosParaPegar[0].longitude,
+              }}
+              apikey={API_KEY}
+              strokeWidth={3}
+              strokeColor="red"
+              mode="DRIVING"
+              onReady={(result) => {
+                console.log(`Rota atual:`);
+                console.log(`- Distância: ${result.distance} km`);
+                console.log(`- Duração: ${result.duration} min.`);
+              }}
+              onError={(error) => {
+                console.error('Erro ao gerar rota:', error);
+                Alert.alert('Erro ao gerar rota', 'Não foi possível calcular a rota.');
+              }}
+            />
+
+            {/* Rota para os demais alunos (em azul claro) */}
+            {alunosParaPegar.length > 1 && (
+              <MapViewDirections
+                origin={{
+                  latitude: alunosParaPegar[0].latitude,
+                  longitude: alunosParaPegar[0].longitude
+                }}
+                waypoints={alunosParaPegar.slice(1, -1).map(aluno => ({
+                  latitude: aluno.latitude,
+                  longitude: aluno.longitude,
+                }))}
+                destination={{
+                  latitude: alunosParaPegar[alunosParaPegar.length - 1].latitude,
+                  longitude: alunosParaPegar[alunosParaPegar.length - 1].longitude,
+                }}
+                apikey={API_KEY}
+                strokeWidth={3}
+                strokeColor="lightblue"
+                mode="DRIVING"
+                onReady={(result) => {
+                  console.log(`Rota seguinte:`);
+                  console.log(`- Distância: ${result.distance} km`);
+                  console.log(`- Duração: ${result.duration} min.`);
+                }}
+                onError={(error) => {
+                  console.error('Erro ao gerar rota:', error);
+                  Alert.alert('Erro ao gerar rota', 'Não foi possível calcular a rota.');
+                }}
+              />
+            )}
+          </>
+        )}
+      </MapView>
 
       <RoundedContainer>
         {userInfo.van_id ? (
@@ -166,36 +304,70 @@ export default function Map() {
                 : vanInfo.max_checkin_time_return;
 
                 const handleCheckin = async () => {
-                  if (checkinDone) return; // Evita múltiplos check-ins
 
                   try {
-                    const currentTime = new Date();
-                    const [checkinHour, checkinMinute] = vanInfo.first_route_of_day
-                      ? vanInfo.max_checkin_time_away.split(":").map(Number)
-                      : vanInfo.max_checkin_time_return.split(":").map(Number);
 
-                    const checkinDeadline = new Date();
-                    checkinDeadline.setHours(checkinHour, checkinMinute, 0, 0);
+                    if (userInfo.role === "student") {
+                      const currentTime = new Date();
+                      const [checkinHour, checkinMinute] = vanInfo.first_route_of_day
+                        ? vanInfo.max_checkin_time_away.split(":").map(Number)
+                        : vanInfo.max_checkin_time_return.split(":").map(Number);
 
-                    if (currentTime > checkinDeadline) {
-                      Alert.alert("Atenção", "O horário máximo para check-in já passou!", [
-                        { text: "OK" },
-                      ]);
-                      return;
-                    }
+                      const checkinDeadline = new Date();
+                      checkinDeadline.setHours(checkinHour, checkinMinute, 0, 0);
 
-                    await axios.patch(
-                      `${BASE_URL}/users/${userInfo.id}/checkin`,
-                      {},
-                      {
-                        headers: {
-                          Authorization: `Bearer ${userToken}`,
-                        },
+                      if (currentTime > checkinDeadline) {
+                        Alert.alert("Atenção", "O horário máximo para check-in já passou!", [
+                          { text: "OK" },
+                        ]);
+                        return;
                       }
-                    );
 
-                    Alert.alert("Sucesso", "Check-in realizado com sucesso!");
-                    setCheckinDone(true); // Atualiza o estado para refletir o check-in
+                      if (currentTime > checkinDeadline) {
+                        Alert.alert("Atenção", "O horário máximo para check-in já passou!", [
+                          { text: "OK" },
+                        ]);
+                        return;
+                      }
+                      // Lógica para estudantes
+                      await axios.patch(
+                        `${BASE_URL}/users/${userInfo.id}/checkin`,
+                        {},
+                        {
+                          headers: {
+                            Authorization: `Bearer ${userToken}`,
+                          },
+                        }
+                      );
+
+                      Alert.alert("Sucesso", "Check-in realizado com sucesso!");
+                      setCheckinDone(true); // Atualiza o estado para refletir o check-in
+                    } else if (userInfo.role === "driver") {
+
+                      // Lógica para motoristas
+                      const response = await axios.post(
+                        `${BASE_URL}/companies/${userInfo.company_id}/vans/${vanInfo.id}/routes`,
+                        {
+                          route: {
+                            status: "in_progress",
+                            locations_attributes: {
+                              latitude: localizacaoAtual.latitude,
+                              longitude: localizacaoAtual.longitude
+                            }
+                          }
+                        },
+                        {
+                          headers: {
+                            Authorization: `Bearer ${userToken}`,
+                          },
+                        }
+                      );
+
+                      const students = response.data.students || [];
+                      Alert.alert("Sucesso", "Rota criada com sucesso!");
+                      setCheckinDone(true); // Atualiza o estado para refletir o check-in
+                      setAlunosParaPegar(students); // Define o estado com os alunos retornados
+                    }
                   } catch (error) {
                     if (error.response) {
                       Alert.alert(
@@ -464,3 +636,41 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+function teste() {
+
+  return (
+    <Container>
+
+
+      {/* Botão para avançar a rota */}
+      <Botao onPress={atualizarProximoDestino}>
+        <BotaoTexto>
+          {alunosParaPegar.length > 0
+            ? `Confirmar Aluno ${ALUNOS_MOCK.length - alunosParaPegar.length + 1}`
+            : 'Todos os alunos confirmados'}
+        </BotaoTexto>
+      </Botao>
+    </Container>
+  );
+}
+
+const Container = styled.View`
+  flex: 1;
+`;
+
+const Botao = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 20px;
+  align-self: center;
+  background-color: #277DFE;
+  border-radius: 10px;
+  padding: 15px 30px;
+`;
+
+const BotaoTexto = styled.Text`
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+`;
