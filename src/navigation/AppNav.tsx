@@ -2,9 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import Login from '../pages/Login';
 import { ActivityIndicator, View } from 'react-native';
 import AppStack from './AppStack';
+import AuthStack from './AuthStack';
 
 export default function AppNav() {
   const {isLoading, userToken} = useContext(AuthContext);
@@ -19,7 +19,7 @@ export default function AppNav() {
 
   return (
     <NavigationContainer>
-      {userToken == null ? <Login /> : <AppStack />}
+      {userToken == null ? <AuthStack /> : <AppStack />}
     </NavigationContainer>
   );
 }

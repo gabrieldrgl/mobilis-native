@@ -9,6 +9,7 @@ export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [vanInfo, setVanInfo] = useState(null);
 
   const login = (email, password) => {
     setIsLoading(true);
@@ -38,6 +39,7 @@ export const AuthProvider = ({children}) => {
       console.log("User info:", response.data.user);
 
       setUserInfo(response.data.user)
+      setVanInfo(response.data.van)
       AsyncStorage.setItem("userInfo", JSON.stringify(response.data.user));
 
       setIsLoading(false);
@@ -76,7 +78,7 @@ export const AuthProvider = ({children}) => {
   // }, [])
 
   return (
-    <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo}}>
+    <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo, vanInfo}}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity } from "react-native";
 import { Background, Button, ButtonText, FormContainer, Hr, IconContainer, Input, InputContainer, InputLabel, RegisterLink, RegisterText, RoundedFooter, VanIcon } from "./styles";
 import FormInput from "../../components/FormInput";
 import DropShadow from "react-native-drop-shadow";
 import { AuthContext } from "../../context/AuthContext";
 
-export default function Login() {
+export default function Login({navigation}) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -39,7 +39,12 @@ export default function Login() {
               <Hr />
 
               <RegisterText>
-                Não possui uma conta? <RegisterLink>Cadastre-se</RegisterLink>
+                Não possui uma conta?
+                <TouchableOpacity onPress={() => navigation.navigate("Registro")}>
+                  <RegisterLink>
+                    Cadastre-se
+                  </RegisterLink>
+                </TouchableOpacity>
               </RegisterText>
             </RoundedFooter>
           </FormContainer>

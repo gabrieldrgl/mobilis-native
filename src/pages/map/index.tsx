@@ -9,10 +9,12 @@ import axios from 'axios';
 import { BASE_URL } from '../../config';
 
 export default function Map() {
-  const { userInfo, userToken } = useContext(AuthContext);
+  const { userInfo, userToken, vanInfo } = useContext(AuthContext);
   const [isModalVisible, setModalVisible] = useState(!userInfo.role);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [checkinDone, setCheckinDone] = useState(userInfo.checkin || false);
   const [formData, setFormData] = useState({
+    name: '',
     inviteToken: '',
     cep: '',
     street: '',
@@ -23,6 +25,8 @@ export default function Map() {
     latitude: null,
     longitude: null,
   });
+
+  console.log(vanInfo)
 
   const formatCnpj = (value) => {
     // Remove qualquer caractere não numérico
@@ -83,6 +87,7 @@ export default function Map() {
 
       if (selectedRole === 'student') {
         payload = {
+          name: formData.name,
           role: 'student',
           token: formData.inviteToken,
           address: {
@@ -96,11 +101,13 @@ export default function Map() {
         };
       } else if (selectedRole === 'driver') {
         payload = {
+          name: formData.name,
           role: 'driver',
           token: formData.inviteToken,
         };
       } else if (selectedRole === 'moderator') {
         payload = {
+          name: formData.name,
           role: 'moderator',
           company: {
             name: formData.companyName,
@@ -150,10 +157,78 @@ export default function Map() {
       />
 
       <RoundedContainer>
-        <CheckinText>Horário máximo para check-in: 17:30</CheckinText>
-        <Button>
-          <ButtonText>Realizar check-in</ButtonText>
-        </Button>
+        {userInfo.van_id ? (
+          <>
+            {(() => {
+              // Determinar o horário com base na rota
+              const checkinTime = vanInfo.first_route_of_day
+                ? vanInfo.max_checkin_time_away
+                : vanInfo.max_checkin_time_return;
+
+                const handleCheckin = async () => {
+                  if (checkinDone) return; // Evita múltiplos check-ins
+
+                  try {
+                    const currentTime = new Date();
+                    const [checkinHour, checkinMinute] = vanInfo.first_route_of_day
+                      ? vanInfo.max_checkin_time_away.split(":").map(Number)
+                      : vanInfo.max_checkin_time_return.split(":").map(Number);
+
+                    const checkinDeadline = new Date();
+                    checkinDeadline.setHours(checkinHour, checkinMinute, 0, 0);
+
+                    if (currentTime > checkinDeadline) {
+                      Alert.alert("Atenção", "O horário máximo para check-in já passou!", [
+                        { text: "OK" },
+                      ]);
+                      return;
+                    }
+
+                    await axios.patch(
+                      `${BASE_URL}/users/${userInfo.id}/checkin`,
+                      {},
+                      {
+                        headers: {
+                          Authorization: `Bearer ${userToken}`,
+                        },
+                      }
+                    );
+
+                    Alert.alert("Sucesso", "Check-in realizado com sucesso!");
+                    setCheckinDone(true); // Atualiza o estado para refletir o check-in
+                  } catch (error) {
+                    if (error.response) {
+                      Alert.alert(
+                        "Erro",
+                        error.response.data.errors?.join(", ") || "Erro ao realizar check-in"
+                      );
+                    } else {
+                      Alert.alert("Erro", "Erro ao realizar check-in. Tente novamente.");
+                    }
+                  }
+                };
+
+              return (
+                <>
+                  <CheckinText>
+                    {userInfo.role === "student" ? (
+                      `Horário máximo para check-in: ${checkinTime}`
+                    ) : (
+                      `Horário previsto para saída: ${userInfo}`
+                    )}
+                  </CheckinText>
+                  <Button onPress={handleCheckin}>
+                    <ButtonText>{checkinDone ? "Check-in realizado" : "Realizar check-in"}</ButtonText>
+                  </Button>
+                </>
+              );
+            })()}
+          </>
+        ) : (
+          <CheckinText>
+            Você não está em nenhuma van
+          </CheckinText>
+        )}
       </RoundedContainer>
 
       <DrawerButton />
@@ -194,6 +269,15 @@ export default function Map() {
                       value={formData.inviteToken}
                       onChangeText={(text) =>
                         setFormData({ ...formData, inviteToken: text })
+                      }
+                    />
+                    <Text>Nome:</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Digite o seu nome"
+                      value={formData.name}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, name: text })
                       }
                     />
                     <Text>CEP:</Text>
@@ -248,10 +332,28 @@ export default function Map() {
                         setFormData({ ...formData, inviteToken: text })
                       }
                     />
+                    <Text>Nome:</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Digite o seu nome"
+                      value={formData.name}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, name: text })
+                      }
+                    />
                   </>
                 )}
                 {selectedRole === 'moderator' && (
                   <>
+                    <Text>Nome:</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Digite o seu nome"
+                      value={formData.name}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, name: text })
+                      }
+                    />
                     <Text>CNPJ:</Text>
                     <TextInput
                       style={styles.input}
